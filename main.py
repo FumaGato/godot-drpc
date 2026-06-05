@@ -4,7 +4,7 @@ import win32gui
 
 """
 NOTE:
-    I need to code the script to stop when Godot is closed/stopped running.
+    I need to code the script to stop when Godot is closed/stopped running (probably).
     Maybe switch to virtual environment?
 """
 
