@@ -1,1 +1,2 @@
-Godot editor Discord presence, using Steam launch option.
+### How to set up:
+Idk bro I'm too lazy to write ts
