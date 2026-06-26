@@ -2,11 +2,12 @@ from pypresence import Presence
 import time
 import win32gui
 
-"""
-NOTE:
-    I need to code the script to stop when Godot is closed/stopped running (probably).
-    Maybe switch to virtual environment?
-"""
+
+# NOTE:
+#     Copy this into Steam launch option:
+#         "C:\...\launch-wrapper.bat" %command%"
+#     Replace '...' with file path for the 'launch-wrapper.bat' file.
+
 
 APP_ID = "1511742323325927617"
 RPC = Presence(APP_ID)
@@ -16,16 +17,12 @@ GODOT = "Godot Engine"
 start_timer = int(time.time())
 
 current_window_title = "Godot Engine - Project Manager"
-window_id = None
 
 rpc_details = "Project Manager"
 rpc_state = "Idle"
 
 project_name = ""
 active_scene = ""
-
-# vvv Steam launch option vvv
-# "D:\Code\Python\Projects\godot-rpc\launch-wrapper.bat" %command%"
 
 running = True
 
@@ -54,25 +51,26 @@ def main():
 
 
 def find_window_id(hwnd, windows):
-    global window_id
-
     title = win32gui.GetWindowText(hwnd)
 
     if GODOT in title:
-        window_id = hwnd
+        windows.append(hwnd)
+        windows.append(title)
 
 
 def check_for_update():
+    global running
     global current_window_title
 
     windows = []
 
     win32gui.EnumWindows(find_window_id, windows)
 
-    new_window_title = win32gui.GetWindowText(window_id)
-
-    if current_window_title != new_window_title:
-        current_window_title = new_window_title
+    if windows:
+        current_window_title = win32gui.GetWindowText(windows[0])
+    else:
+        running = False
+        return
 
     update_active_scene()
 
